@@ -95,6 +95,37 @@ key can be used:
 }
 ```
 
+To remove an attribute, simply update it with an empty string:
+
+```javascript
+{
+    title: {
+        "@title": ""
+    }
+}
+```
+
+If you don't want to *replace* the value of an attribute, you can use the `+` operator
+to append to the value instead:
+
+```javascript
+{
+    title: {
+        "+@title": " And now the title is even longer!"
+    }
+}
+```
+
+This works with the content of an element, too:
+
+```javascript
+{
+    title: {
+        "+*": ", obviously"
+    }
+}
+```
+
 ## Installation
 
     npm install --save domglue
