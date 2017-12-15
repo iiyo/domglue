@@ -49,7 +49,7 @@ We can fill the attributes with data such as this:
 ```javascript
 {
     input: {
-         "@name": "myInput",
+        "@name": "myInput",
         "@placeholder": "Insert text",
         "@value": "Default value"
     }
@@ -145,7 +145,7 @@ var glue = require("domglue");
 var view = glue.live(element)
 ```
 
-Creates a DOMGlue view for an element. Returns an object with the following methods.
+Creates a domglue view for an element. Returns an object with the following methods.
 
 #### [method] update
 
@@ -197,7 +197,7 @@ Destroys the view and cleans up references to the DOM element.
 var template = glue.template(content)
 ```
 
-Creates a DOMGlue template.
+Creates a domglue template.
 
 #### [method] render
 
@@ -270,7 +270,9 @@ function keyToTagName(key) {
 
 ## Run the tests
 
-To run the tests, you need to have mocha install globally. Also, don't forget to install
-the dev dependencies. Then you can run all the tests with:
+To run the tests, you need to have [mocha](https://mochajs.org) installed globally.
+Also, don't forget to install the dev dependencies.
+
+Then you can run all the tests with:
 
     npm run test
