@@ -1,6 +1,6 @@
 {
   "name": "domglue",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Unobtrusive templating using the DOM",
   "main": "index.js",
   "scripts": {
@@ -22,5 +22,11 @@
   "bugs": {
     "url": "https://github.com/iiyo/domglue/issues"
   },
-  "homepage": "https://github.com/iiyo/domglue#readme"
+  "homepage": "https://github.com/iiyo/domglue#readme",
+  "dependencies": {
+    "clone": "^2.1.1"
+  },
+  "devDependencies": {
+    "jsdom": "^11.5.1"
+  }
 }

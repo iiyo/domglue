@@ -1,9 +1,9 @@
-# DOM Glue
+# domglue
 
-DOMGlue is a simple, unobtrusive view layer that utilizes the DOM instead of using
+A simple, unobtrusive view layer that utilizes the DOM instead of using
 a custom template language.
 
-DOMGlue can render a part of the live DOM or use template strings containing HTML or XML.
+It can render a part of the live DOM or use template strings containing HTML or XML.
 Elements with variable content are marked with a `data-key` attribute. Each `data-key`
 attribute has as its value a key in the data which is used to render the template or update
 the DOM.
@@ -81,9 +81,23 @@ This results in:
 </div>
 ```
 
+And if you want to update both an element's attributes and its content, the `*` special
+key can be used:
+
+```javascript
+{
+    item: {
+        title: {
+            "*": "Heading",
+            "@title": "It's got a title, too!"
+        }
+    }
+}
+```
+
 ## Installation
 
-    npm install domglue
+    npm install --save domglue
 
 ## API
 
@@ -115,32 +129,6 @@ view.render(data)
 
 Updates the view with `data` and removes all elements with keys that are not contained
 within `data`.
-
-#### [method] set
-
-```javascript
-view.set(key, value, raw)
-```
-
-Sets the value for one key. If more than one element bears the key, all the elements
-are changed. If `raw` is given and set to `true`, the values will **not** be escaped.
-This can be useful if you want to insert HTML, but you need to be careful about XSS.
-
-```javascript
-view.set(values, raw)
-```
-
-Sets many keys. The `values` property maps keys to values. If `raw` is given and is set
-to `true`, values will not be escaped!
-
-#### [method] setRaw
-
-```javascript
-view.setRaw(key, value)
-view.setRaw(values)
-```
-
-Shorthand for using the `set` method with raw values.
 
 #### [method] get
 

@@ -1,0 +1,7 @@
+<person>
+    <names>
+        <forename>Foo</forename>
+        <surename>Bar</surename>
+    </names>
+    <gender type="m" />
+</person>
