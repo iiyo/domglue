@@ -116,36 +116,34 @@ Creates a DOMGlue view for an element. Returns an object with the following meth
 #### [method] update
 
 ```javascript
-view.update(data)
+view.update(data, raw)
 ```
 
-Updates the view with `data`.
+Updates the view with `data`. If `raw` is `true`, HTML can be inserted using the values.
 
 #### [method] render
 
 ```javascript
-view.render(data)
+view.render(data, raw)
 ```
 
 Updates the view with `data` and removes all elements with keys that are not contained
-within `data`.
+within `data`. If `raw` is `true`, HTML can be inserted using the values.
 
 #### [method] get
 
 ```javascript
-view.get(selector)
+view.get(key, attribute)
 ```
 
 Returns the value for a key. If more than one element bears the key, only the first value is
-returned. The parameter `selector` can be either just a key or a combination of a key and
-an attribute:
-
-    some_key/some_attribute
+returned. If parameter `attribute` is present, the value of the attribute with that name
+is returned instead of the element's content.
 
 #### [method] getAll
 
 ```javascript
-view.getAll(selector)
+view.getAll(key, attribute)
 ```
 
 Same as the `get` method, but returns an array containing the values of **all** elements/attributes
@@ -170,8 +168,75 @@ Creates a DOMGlue template.
 #### [method] render
 
 ```javascript
-template.render(data)
+template.render(data, raw?)
 ```
 
 Renders the template using `data` and returns the result as a string.
-Removes elements that with keys that don't exist in `data`.
+Removes elements that with keys that don't exist in `data`. If `raw`
+is `true`, HTML content can be used as values.
+
+#### [method] fill
+
+```javascript
+template.fill(data, raw?)
+```
+
+Same as `.render`, but doesn't remove elements.
+
+
+## Configure the API
+
+Not satisfied with how the DOM is accessed or what operators are available?
+Want to use domglue with Node.js?
+Then you can tweak domglue like this:
+
+```javascript
+var fs = require("fs");
+var path = require("path");
+var Dom = require("jsdom").JSDOM;
+var configure = require("domglue/configure");
+
+var dom = new Dom(fs.readFileSync(path.join(__dirname, "data.xml")));
+var document = dom.window.document;
+
+// FYI: This is to show what's possible, not something that necessarily makes sense.
+var glue = configure({
+    keyAttribute: "data-id", // rename data-key
+    keyToSelector: keyToTagName, // change how keys and selectors relate
+    operators: {
+        "~#": toggleClasses
+    },
+    markers: {
+        attribute: ":", // instead of @
+        elementContent: "_" // instead of *
+    }
+}, document);
+
+function toggleClasses(oldValue, newValue) {
+    
+    var all = oldValue.split(" ");
+    var next = newValue.split(" ");
+    
+    next.forEach(function (className) {
+        if (all.indexOf(className) >= 0) {
+            all.splice(all.indexOf(className), 1);
+        }
+        else {
+            all.push(className);
+        }
+    });
+    
+    return all.join(" ");
+}
+
+function keyToTagName(key) {
+    return key;
+}
+```
+
+## Run the tests
+
+To run the tests, you need to have mocha install globally. Also, don't forget to install
+the dev dependencies. Then you can run all the tests with:
+
+    npm run test
