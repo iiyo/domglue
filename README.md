@@ -126,6 +126,9 @@ This works with the content of an element, too:
 }
 ```
 
+In the same fashion, you can prepend content or attribute values by using the
+`^` operator instead of the `+` operator.
+
 ## Installation
 
     npm install --save domglue

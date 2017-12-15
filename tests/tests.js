@@ -105,6 +105,37 @@ describe("domglue", function () {
                 assert.equal(qs(testDoc, "[data-key='foo']").innerHTML, "bazbar");
             });
             
+            it("should append to an attribute value when using `+@`", function () {
+                view.render({
+                    data: {
+                        apples: {
+                            "+@class": " c3"
+                        }
+                    }
+                });
+                assert.equal(qs(testDoc, "[data-key='apples']").getAttribute("class"), "c1 c2 c3");
+            });
+            
+            it("should prepend the content of the parent when using `^*`", function () {
+                simple.render({
+                    foo: {
+                        "^*": "bar"
+                    }
+                });
+                assert.equal(qs(testDoc, "[data-key='foo']").innerHTML, "barbaz");
+            });
+            
+            it("should prepend an attribute value when using `^@`", function () {
+                view.render({
+                    data: {
+                        apples: {
+                            "^@class": "c0 "
+                        }
+                    }
+                });
+                assert.equal(qs(testDoc, "[data-key='apples']").getAttribute("class"), "c0 c1 c2");
+            });
+            
             it("should set an attribute value when using `@[name]`", function () {
                 simple.render({
                     foo: {
