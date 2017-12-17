@@ -244,8 +244,22 @@ function create(options, doc) {
             return insert("render", data, raw);
         }
         
+        function renderMany(data, raw, separator) {
+            return insertMany("render", data, raw, separator);
+        }
+        
         function fill(data, raw) {
             return insert("update", data, raw);
+        }
+        
+        function fillMany(data, raw, separator) {
+            return insertMany("update", data, raw, separator);
+        }
+        
+        function insertMany(type, data, raw, separator) {
+            return data.map(function (item) {
+                return insert(type, item, raw);
+            }).join(separator || "");
         }
         
         function insert(type, data, raw) {
@@ -265,7 +279,9 @@ function create(options, doc) {
         
         return {
             fill: fill,
-            render: render
+            fillMany: fillMany,
+            render: render,
+            renderMany: renderMany
         };
     }
     

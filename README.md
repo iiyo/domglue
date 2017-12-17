@@ -179,7 +179,7 @@ var items = [
 
 view.update({
     title: "Names",
-    names: items.map(template.fill).join("") // no `bind`: `this` is never used in domglue
+    names: template.fillMany(items)
 }, true);
 ```
 
@@ -290,6 +290,16 @@ Please note: `raw` is only used when `true` and not just a truthy value. This is
 this way the method is compatible with array methods like `.forEach`.
 
 
+#### [method] renderMany
+
+```javascript
+template.renderMany(data, raw?, separator?)
+```
+
+Renders the template for each item in the `data` array. If no `separator` is specified,
+an empty string is used to concatenate the results.
+
+
 #### [method] fill
 
 ```javascript
@@ -300,6 +310,16 @@ Same as `.render`, but doesn't remove elements.
 
 Please note: `raw` is only used when `true` and not just a truthy value. This is because
 this way the method is compatible with array methods like `.forEach`.
+
+
+#### [method] fillMany
+
+```javascript
+template.fillMany(data, raw?, separator?)
+```
+
+Fills the template for each item in the `data` array. If no `separator` is specified,
+an empty string is used to concatenate the results.
 
 
 ## Configure the API

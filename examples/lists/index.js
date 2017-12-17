@@ -24,7 +24,7 @@ var items = [
 
 view.update({
     title: "Names",
-    names: items.map(template.fill).join("") // no `bind`: `this` is never used in domglue
+    names: template.fillMany(items)
 }, true);
 
 console.log(dom.serialize());

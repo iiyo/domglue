@@ -360,6 +360,54 @@ describe("domglue", function () {
             
         });
         
+        describe(".fillMany(data, raw, separator)", function () {
+            
+            it("should fill the template for each item in `data`, concat results", function () {
+                
+                var template = domglue.template('<i data-key="value"></i>');
+                var templateResult = template.fillMany([{value: "a"}, {value: "b"}]);
+                
+                assert.equal(typeof templateResult, "string");
+                assert.equal(templateResult, '<i data-key="value">a</i><i data-key="value">b</i>');
+            });
+            
+            it("should fill in HTML when `raw` is true", function () {
+                
+                var template = domglue.template('<i data-key="value"></i>');
+                
+                var templateResult = template.fillMany([
+                    {value: "<a>a</a>"},
+                    {value: "<b>b</b>"}
+                ], true);
+                
+                assert.equal(typeof templateResult, "string");
+                
+                assert.equal(
+                    templateResult,
+                    '<i data-key="value"><a>a</a></i><i data-key="value"><b>b</b></i>'
+                );
+            });
+            
+            it("should concat results with `separator` if given", function () {
+                
+                var template = domglue.template('<i data-key="value"></i>');
+                
+                var templateResult = template.fillMany(
+                    [{value: "a"}, {value: "b"}],
+                    false,
+                    "<br />"
+                );
+                
+                assert.equal(typeof templateResult, "string");
+                
+                assert.equal(
+                    templateResult,
+                    '<i data-key="value">a</i><br /><i data-key="value">b</i>'
+                );
+            });
+            
+        });
+        
         describe(".render(data)", function () {
             
             it("should do the same as live.render(), but return a filled template", function () {
@@ -373,6 +421,54 @@ describe("domglue", function () {
                 
                 assert(templateResult);
                 assert.equal(templateResult, viewResult);
+            });
+            
+        });
+        
+        describe(".renderMany(data, raw, separator)", function () {
+            
+            it("should fill the template for each item in `data`, concat results", function () {
+                
+                var template = domglue.template('<i data-key="value"></i>');
+                var templateResult = template.renderMany([{}, {value: "b"}]);
+                
+                assert.equal(typeof templateResult, "string");
+                assert.equal(templateResult, '<i data-key="value">b</i>');
+            });
+            
+            it("should fill in HTML when `raw` is true", function () {
+                
+                var template = domglue.template('<i data-key="value"></i>');
+                
+                var templateResult = template.renderMany([
+                    {value: "<a>a</a>"},
+                    {}
+                ], true);
+                
+                assert.equal(typeof templateResult, "string");
+                
+                assert.equal(
+                    templateResult,
+                    '<i data-key="value"><a>a</a></i>'
+                );
+            });
+            
+            it("should concat results with `separator` if given", function () {
+                
+                var template = domglue.template('<i data-key="value"></i>');
+                
+                var templateResult = template.renderMany(
+                    [{value: "a"}, {}, {value: "c"}],
+                    false,
+                    "<br />"
+                );
+                
+                assert.equal(typeof templateResult, "string");
+                
+                assert.equal(
+                    templateResult,
+                    '<i data-key="value">a</i><br /><br /><i data-key="value">c</i>'
+                );
             });
             
         });
