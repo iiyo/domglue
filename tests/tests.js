@@ -6,6 +6,7 @@ var assert = require("assert");
 var Dom = require("jsdom").JSDOM;
 
 var configure = require("../configure");
+var operators = require("../operators");
 
 var LIVE_METHODS = ["render", "update", "get", "getAll", "find", "findAll", "destroy"];
 var TEMPLATE = fs.readFileSync(path.join(__dirname, "/template.html"));
@@ -154,11 +155,18 @@ describe("domglue", function () {
                 assert.equal(qs(testDoc, "[data-key='foo']").getAttribute("title"), "no way");
             });
             
-            it("should only insert HTML content when `raw` is true", function () {
+            it("should only insert HTML content when `raw` is true (not just truthy)", function () {
+                
                 simple.render({
                     foo: '<div class="test"></div>'
                 });
                 assert.equal(qs(testDoc, ".test"), null);
+                
+                simple.render({
+                    foo: '<div class="test"></div>'
+                }, "yeah");
+                assert.equal(qs(testDoc, ".test"), null);
+                
                 simple.render({
                     foo: '<div class="test"></div>'
                 }, true);
@@ -205,11 +213,18 @@ describe("domglue", function () {
                 assert(qs(testDoc, "[data-key='apples']"));
             });
             
-            it("should only insert HTML content when `raw` is true", function () {
+            it("should only insert HTML content when `raw` is true, not just truthy", function () {
+                
                 simple.update({
                     foo: '<div class="test"></div>'
                 });
                 assert.equal(qs(testDoc, ".test"), null);
+                
+                simple.update({
+                    foo: '<div class="test"></div>'
+                }, "yes");
+                assert.equal(qs(testDoc, ".test"), null);
+                
                 simple.update({
                     foo: '<div class="test"></div>'
                 }, true);
@@ -403,6 +418,49 @@ describe("domglue/configure", function () {
         assert.equal(qs(testDoc, "forename").textContent, "Jane");
         assert.equal(qs(testDoc, "surename").textContent, "Doe");
         assert.equal(qs(testDoc, "gender").getAttribute("type"), "f");
+        
+    });
+    
+});
+
+describe("domglue/operators", function () {
+    
+    describe("+.", function () {
+        
+        it("should add one class string to another, omitting duplicates", function () {
+            assert.equal(operators["+."]("foo bar", "baz foo biz boo"), "foo bar baz biz boo");
+        });
+        
+        it("shouldn't fail with empty strings for either argument", function () {
+            assert.equal(operators["+."]("", "foo biz"), "foo biz");
+            assert.equal(operators["+."]("foo biz", ""), "foo biz");
+            assert.equal(operators["+."]("", ""), "");
+        });
+        
+        it("should normalize spaces", function () {
+            assert.equal(operators["+."](" foo   bar  baz  ", " foo  biz  "), "foo bar baz biz");
+            assert.equal(operators["+."]("   ", "    "), "");
+        });
+        
+    });
+    
+    describe("-.", function () {
+        
+        it("should remove classes that are present in both class strings", function () {
+            assert.equal(operators["-."]("foo bar baz", "baz foo biz boo"), "bar");
+            assert.equal(operators["-."]("foo bar baz", "bar biz boo"), "foo baz");
+        });
+        
+        it("shouldn't fail with empty strings for either argument", function () {
+            assert.equal(operators["-."]("", "foo biz"), "");
+            assert.equal(operators["-."]("foo biz", ""), "foo biz");
+            assert.equal(operators["-."]("", ""), "");
+        });
+        
+        it("should normalize spaces", function () {
+            assert.equal(operators["-."](" foo   bar  baz  ", " foo  biz  "), "bar baz");
+            assert.equal(operators["-."]("   ", "    "), "");
+        });
         
     });
     
