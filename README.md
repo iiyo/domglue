@@ -129,6 +129,76 @@ This works with the content of an element, too:
 In the same fashion, you can prepend content or attribute values by using the
 `^` operator instead of the `+` operator.
 
+## Manipulating classLists
+
+Because just appending or prepending class strings to an existing class attribute can lead
+to unexpected results, domglue has the following operators to manipulate classes:
+
+ * `+.`: adds all the classes that are in the data value but not in the current attribute value
+ * `-.`: removes all the classes in the data value from the current attribute value
+
+For example, removing the classes `foo` and `bar` from an element and adding `biz` could
+look like this in your data:
+
+```javascript
+{
+    title: {
+        "-.@class": "foo bar",
+        "+.@class": "biz"
+    }
+}
+```
+
+## Working with lists
+
+Since domglue just fills in data in the DOM and doesn't support any loops or logic on its own,
+how do you handle lists? Well, it's pretty straightforward actually -- you use a little bit of
+JS and domglue templates for that:
+
+```html
+<body>
+    <h1 data-key="title"></h1>
+    <ul data-key="names">
+        
+    </ul>
+</body>
+```
+
+```javascript
+var view = domglue.live(document.body);
+var template = domglue.template('<li data-key="name"></li>');
+
+var items = [
+    {
+        name: "Fizz"
+    },
+    {
+        name: "Buzz"
+    }
+];
+
+view.update({
+    title: "Names",
+    names: items.map(template.fill).join("") // no `bind`: `this` is never used in domglue
+}, true);
+```
+
+Resulting DOM:
+
+```html
+<body>
+    <h1 data-key="title">Names</h1>
+    <ul data-key="names">
+        <li data-key="name">Fizz</li>
+        <li data-key="name">Buzz</li>
+    </ul>
+</body>
+```
+
+Why is this preferable to having logic in your HTML? Because the logic is written in JS
+and is fully testable.
+
+
 ## Installation
 
     npm install --save domglue
@@ -155,6 +225,9 @@ view.update(data, raw)
 
 Updates the view with `data`. If `raw` is `true`, HTML can be inserted using the values.
 
+Please note: `raw` is only used when `true` and not just a truthy value. This is because
+this way the method is compatible with array methods like `.forEach`.
+
 #### [method] render
 
 ```javascript
@@ -163,6 +236,10 @@ view.render(data, raw)
 
 Updates the view with `data` and removes all elements with keys that are not contained
 within `data`. If `raw` is `true`, HTML can be inserted using the values.
+
+Please note: `raw` is only used when `true` and not just a truthy value. This is because
+this way the method is compatible with array methods like `.forEach`.
+
 
 #### [method] get
 
@@ -209,6 +286,10 @@ Renders the template using `data` and returns the result as a string.
 Removes elements that with keys that don't exist in `data`. If `raw`
 is `true`, HTML content can be used as values.
 
+Please note: `raw` is only used when `true` and not just a truthy value. This is because
+this way the method is compatible with array methods like `.forEach`.
+
+
 #### [method] fill
 
 ```javascript
@@ -216,6 +297,9 @@ template.fill(data, raw?)
 ```
 
 Same as `.render`, but doesn't remove elements.
+
+Please note: `raw` is only used when `true` and not just a truthy value. This is because
+this way the method is compatible with array methods like `.forEach`.
 
 
 ## Configure the API
