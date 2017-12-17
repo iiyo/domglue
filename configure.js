@@ -96,7 +96,7 @@ function create(options, doc) {
             
             var parts = selector.split(options.markers.elementContent);
             var operator = parts[0];
-            var property = raw ? "innerHTML" : "textContent";
+            var property = raw === true ? "innerHTML" : "textContent";
             
             if (operator in options.operators) {
                 element[property] = options.operators[operator](element.textContent, value);
@@ -137,7 +137,7 @@ function create(options, doc) {
         function processElement(item, key) {
             
             var targets = findAllByKey(element, key);
-            var property = raw ? "innerHTML" : "textContent";
+            var property = raw === true ? "innerHTML" : "textContent";
             
             each(targets, function (target) {
                 
