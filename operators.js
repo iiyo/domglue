@@ -6,12 +6,12 @@ var operators = {
     "-.": removeClasses
 };
 
-function append(currentValue, newValue) {
-    return "" + currentValue + newValue;
+function append(currentValue, newValue, options) {
+    return "" + (options.attributeName ? currentValue : options.element.innerHTML) + newValue;
 }
 
-function prepend(currentValue, newValue) {
-    return "" + newValue + currentValue;
+function prepend(currentValue, newValue, options) {
+    return "" + newValue + (options.attributeName ? currentValue : options.element.innerHTML);
 }
 
 function addClasses(current, classes) {

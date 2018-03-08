@@ -350,10 +350,12 @@ var glue = configure({
     }
 }, document);
 
-function toggleClasses(oldValue, newValue) {
+function toggleClasses(oldValue, newValue, options) {
     
     var all = oldValue.split(" ");
     var next = newValue.split(" ");
+    
+    console.log(options); // {raw, element, attributeName?}
     
     next.forEach(function (className) {
         if (all.indexOf(className) >= 0) {

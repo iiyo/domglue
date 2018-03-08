@@ -106,6 +106,15 @@ describe("domglue", function () {
                 assert.equal(qs(testDoc, "[data-key='foo']").innerHTML, "bazbar");
             });
             
+            it("should append to the HTML content of the parent when using `+*` raw", function () {
+                simple.render({
+                    foo: {
+                        "+*": "<i>bar</i>"
+                    }
+                }, true);
+                assert.equal(qs(testDoc, "[data-key='foo']").innerHTML, "baz<i>bar</i>");
+            });
+            
             it("should append to an attribute value when using `+@`", function () {
                 view.render({
                     data: {
@@ -124,6 +133,15 @@ describe("domglue", function () {
                     }
                 });
                 assert.equal(qs(testDoc, "[data-key='foo']").innerHTML, "barbaz");
+            });
+            
+            it("should prepend the HTML content of the parent when using `^*` raw", function () {
+                simple.render({
+                    foo: {
+                        "^*": "<i>bar</i>"
+                    }
+                }, true);
+                assert.equal(qs(testDoc, "[data-key='foo']").innerHTML, "<i>bar</i>baz");
             });
             
             it("should prepend an attribute value when using `^@`", function () {

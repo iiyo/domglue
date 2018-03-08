@@ -99,7 +99,14 @@ function create(options, doc) {
             var property = raw === true ? "innerHTML" : "textContent";
             
             if (operator in options.operators) {
-                element[property] = options.operators[operator](element.textContent, value);
+                element[property] = options.operators[operator](
+                    element.textContent,
+                    value,
+                    {
+                        raw: !!raw,
+                        element: element
+                    }
+                );
             }
             else {
                 element[property] = value;
@@ -121,7 +128,15 @@ function create(options, doc) {
                     if (operator in options.operators) {
                         element.setAttribute(
                             attribute, 
-                            options.operators[operator](element.getAttribute(attribute), value)
+                            options.operators[operator](
+                                element.getAttribute(attribute),
+                                value,
+                                {
+                                    raw: !!raw,
+                                    element: element,
+                                    attributeName: attribute
+                                }
+                            )
                         );
                     }
                 }
